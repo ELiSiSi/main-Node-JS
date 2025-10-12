@@ -1,0 +1,7 @@
+!views
+!views/**
+node_modules
+.env*
+secret.env
+
+.env
