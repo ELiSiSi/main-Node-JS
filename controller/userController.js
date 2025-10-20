@@ -4,6 +4,10 @@ import crypto from 'crypto';
 
 import User from '../models/userModel.js';
 import AppError from '../utils/appError.js';
+import {deleteOne,updateOne,createOne  } from './handlerFactory.js'
+
+//-------------------------------------------------------------------------------------------
+export  const createUser= createOne(User);
 
 //-------------------------------------------------------------------------------------------
 const filterObj = (Obj, ...allowedFields) => {
@@ -12,6 +16,7 @@ const filterObj = (Obj, ...allowedFields) => {
   Object.keys(Obj).forEach((el) => {
     if (allowedFields.includes(el)) newObj[el] = Obj[el];
   });
+  return newObj; 
 };
 
 //----------------------------------------------------------------------------------------
@@ -63,3 +68,11 @@ export const deleteMe = asyncHandler(async (req, res, next) => {
     },
   });
 });
+
+
+//----------------------------------------------------------------------------------------
+export const updateUser =   updateOne(User);
+
+//----------------------------------------------------------------------------------------
+export const deleteUser =   deleteOne(User);
+

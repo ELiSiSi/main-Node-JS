@@ -15,6 +15,8 @@ import hpp from 'hpp';
 import AppError from './utils/appError.js';
 import  errorController  from './controller/errorController.js';
 import userRouter from './routes/userRoute.js';
+import tourRouter from './routes/tourRoute.js';
+import reviewRouter from './routes/reviewRoute.js';
  
 
 
@@ -48,6 +50,7 @@ app.use(express.static(`${__dirname}/public`));
 // 2) تنظيف البيانات من NoSQL Injection
 app.use(mongoSanitize());
 
+
 // 3) تنظيف البيانات من XSS Attack
 app.use(xss());
  
@@ -65,11 +68,38 @@ app.use(hpp());
 
 //-----------------------------------------------------------------------------------------
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/tours', tourRouter);
+app.use('/api/v1/reviews', reviewRouter);
+ 
+
+
+
+// Handle undefined routes
+app.use((req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+
 
 
 
 
 app.use(errorController);
+
+
+
+//----------------------------------------------------------------------------------------------------------
+process.on('unhandledRejection', (err) => {
+  console.log('❌ Unhandled Rejection 💥 Shutting down...');
+  console.log(err.name, err.message);
+  process.exit(1);
+});
+
+process.on('uncaughtException', (err) => {
+  console.log('❌ Uncaught Exception 💥 Shutting down...');
+  console.log(err.name, err.message);
+  process.exit(1);
+});
+
 
 //-----------------------------------------------------------------------------------------
 mongoose
